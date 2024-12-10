@@ -1,0 +1,179 @@
+tags:
+  name: Brand
+  description: Endpoints for brand
+
+paths:
+  /v1/brand/list:
+    get:
+      summary: Get all brand profiles
+      tags:
+        - Brand
+      responses:
+        200:
+          description: Brand profiles fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        profilePic:
+                          type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/brand/search:
+    get:
+      summary: Get all brand profiles
+      tags:
+        - Brand
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Name of the brand
+
+      responses:
+        '200':
+          description: Brand profiles fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandProfile'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+  /v1/brand:
+    get:
+      summary: Get All brands
+      tags:
+        - Brand
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: string
+
+        - in: query
+          name: limit
+          required: true
+          schema:
+            type: string
+
+        - in: query
+          name: approved
+          schema:
+            type: boolean
+
+        - in: query
+          name: rejected
+          schema:
+            type: boolean
+
+        - in: query
+          name: name
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: The data fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/BrandProfile'
+                      currentPage:
+                        type: number
+                      totalPages:
+                        type: number
+                      totalCount:
+                        type: number
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'

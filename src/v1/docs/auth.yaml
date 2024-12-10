@@ -1,0 +1,361 @@
+tags:
+  - name: Auth
+    description: Endpoints for Authentication
+
+paths:
+  /v1/auth/signup:
+    post:
+      summary: Sign up a new user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authRequest'
+      responses:
+        '200':
+          description: Successful sign up
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      email:
+                        type: string
+                      role:
+                        type: string
+                      isVerified:
+                        type: boolean
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/auth/login:
+    post:
+      summary: Log in an existing user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idToken:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/loginRequest'
+
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/auth/reset/password:
+    post:
+      summary: Reset user password
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordDTO'
+      responses:
+        '200':
+          description: Successful password reset
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/auth/reset/password/email:
+    post:
+      summary: Send reset password email
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordEmailDTO'
+      responses:
+        '200':
+          description: Email sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/auth/otp:
+    post:
+      summary: Send otp to whatsapp number
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mobileRequest'
+      responses:
+        '200':
+          description: otp sent to mobile no successfully!!
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/auth/otp/verify:
+    post:
+      summary: verify otp sent to whatsapp number
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/verifyMobileRequest'
+      responses:
+        '200':
+          description: otp verified successfully!!
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sstatus:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/loginRequest'
+
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        isVerified:
+          type: boolean
+        isPaused:
+          type: boolean
+        role:
+          type: string
+        isOnBoarded:
+          type: boolean
+        profile:
+          oneOf:
+            - $ref: '#/components/schemas/AdminProfileInput'
+            - $ref: '#/components/schemas/BrandProfileInput'
+            - $ref: '#/components/schemas/AgencyProfileInput'
+            - $ref: '#/components/schemas/EmployeeProfileInput'
+            - $ref: '#/components/schemas/InfluencerProfileInput'
+
+    authRequest:
+      type: object
+      properties:
+        idToken:
+          type: string
+        role:
+          type: string
+      required:
+        - idToken
+        - role
+
+    ResetPasswordEmailDTO:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+        - email
+
+    ResetPasswordDTO:
+      type: object
+      properties:
+        oobCode:
+          type: string
+        password:
+          type: string
+      required:
+        - oobCode
+        - password
+
+    mobileRequest:
+      type: object
+      properties:
+        mobileNo:
+          type: string
+      required:
+        - mobileNo
+
+    verifyMobileRequest:
+      type: object
+      properties:
+        mobileNo:
+          type: string
+        otp:
+          type: string
+      required:
+        - mobileNo
+        - otp
+
+    loginRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/user'

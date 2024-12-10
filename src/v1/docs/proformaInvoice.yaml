@@ -1,0 +1,629 @@
+tags:
+  name: ProformaInvoice
+  description: Proforma Invoice endpoints
+
+paths:
+  /v1/invoice/proforma:
+    post:
+      summary: Create a Proforma Invoice
+      tags:
+        - ProformaInvoice
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProformaInvoiceInput'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProformaInvoice'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    get:
+      summary: Get all Proforma Invoice
+      tags:
+        - ProformaInvoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: startDate
+          schema:
+            type: string
+          required: true
+          description: start date of the report
+        - in: query
+          name: endDate
+          schema:
+            type: string
+          required: true
+          description: end date of the report
+        - in: query
+          name: invoiceNo
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProformaInvoiceDTO'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/proforma/{id}:
+    get:
+      summary: Get a Proforma Invoice
+      tags:
+        - ProformaInvoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Proforma Invoice
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/ProformaInvoice'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+    patch:
+      summary: Update a Proforma Invoice
+      tags:
+        - ProformaInvoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Proforma Invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProformaInvoiceUpdate'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProformaInvoice'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    delete:
+      summary: Delete a Proforma Invoice
+      tags:
+        - ProformaInvoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Proforma Invoice
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/proforma/share:
+    post:
+      tags:
+        - ProformaInvoice
+      summary: Share Proforma Invoice
+
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareInvoiceRequest'
+      responses:
+        200:
+          description: Shared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/proforma/download:
+    get:
+      tags:
+        - ProformaInvoice
+      summary: Download Proforma Invoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the Proforma Invoice
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    ProformaInvoiceInput:
+      type: object
+      properties:
+        campaign:
+          type: string
+          format: uuid
+          description: Unique identifier for the campaign
+        gstTin:
+          type: string
+          description: GST TIN of the entity
+        billNo:
+          type: string
+          description: Bill number
+        billDate:
+          type: string
+          format: date
+          description: Date of the bill
+        invoiceNo:
+          type: string
+          description: Invoice number
+        invoiceDate:
+          type: string
+          format: date
+          description: Date of the invoice
+        amount:
+          type: number
+          description: Total amount for the invoice
+        sgst:
+          type: number
+          description: SGST amount
+        cgst:
+          type: number
+          description: CGST amount
+        igst:
+          type: number
+          description: IGST amount
+        total:
+          type: number
+          description: Total amount including taxes
+        tds:
+          type: number
+          description: TDS deducted
+        received:
+          type: number
+          description: Amount received
+        balanceAmount:
+          type: number
+          description: Balance amount to be paid
+        month:
+          type: string
+          description: The month associated with the invoice
+      required:
+        - campaign
+        - gstTin
+        - billNo
+        - billDate
+        - invoiceNo
+        - invoiceDate
+        - amount
+        - sgst
+        - cgst
+        - igst
+        - total
+        - tds
+        - month
+
+    ProformaInvoiceUpdate:
+      type: object
+      properties:
+        gstTin:
+          type: string
+          description: GST TIN of the entity
+        billNo:
+          type: string
+          description: Bill number
+        billDate:
+          type: string
+          format: date
+          description: Date of the bill
+        invoiceNo:
+          type: string
+          description: Invoice number
+        invoiceDate:
+          type: string
+          format: date
+          description: Date of the invoice
+        amount:
+          type: number
+          description: Total amount for the invoice
+        sgst:
+          type: number
+          description: SGST amount
+        cgst:
+          type: number
+          description: CGST amount
+        igst:
+          type: number
+          description: IGST amount
+        total:
+          type: number
+          description: Total amount including taxes
+        tds:
+          type: number
+          description: TDS deducted
+        received:
+          type: number
+          description: Amount received
+        balanceAmount:
+          type: number
+          description: Balance amount to be paid
+        month:
+          type: string
+          description: The month associated with the invoice
+
+    ProformaInvoice:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the proforma invoice
+        campaign:
+          type: string
+          format: uuid
+          description: Campaign associated with the invoice
+        gstTin:
+          type: string
+          description: GST TIN of the entity
+        billNo:
+          type: string
+          description: Bill number
+        billDate:
+          type: string
+          format: date
+          description: Date of the bill
+        invoiceNo:
+          type: string
+          description: Invoice number
+        invoiceDate:
+          type: string
+          format: date
+          description: Date of the invoice
+        amount:
+          type: number
+          description: Total amount for the invoice
+        sgst:
+          type: number
+          description: SGST amount
+        cgst:
+          type: number
+          description: CGST amount
+        igst:
+          type: number
+          description: IGST amount
+        total:
+          type: number
+          description: Total amount including taxes
+        tds:
+          type: number
+          description: TDS deducted
+        received:
+          type: number
+          description: Amount received
+        balanceAmount:
+          type: number
+          description: Balance amount to be paid
+        month:
+          type: string
+          description: The month associated with the invoice
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Update timestamp
+
+    ProformaInvoiceDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the proforma invoice
+        invoiceNumber:
+          type: string
+          description: Invoice number
+        billNo:
+          type: string
+          description: Bill number
+        billDate:
+          type: string
+          format: date
+          description: Date of the bill
+        issueDate:
+          type: string
+          format: date
+          description: Date of invoice issuance
+        amount:
+          type: number
+          description: Total amount for the invoice
+        month:
+          type: string
+          description: The month associated with the invoice
+        gstTin:
+          type: string
+          description: GST TIN of the entity
+        tds:
+          type: number
+          description: TDS deducted from the amount
+        balance:
+          type: number
+          description: Remaining balance after payment
+        received:
+          type: number
+          description: Amount received
+        brandName:
+          type: string
+          description: Name of the brand for the campaign
+        code:
+          type: string
+          description: Code of the campaign
+        name:
+          type: string
+          description: Name of the campaign
+        campaignDuration:
+          type: string
+          description: Duration of the campaign, formatted as 'startDate - endDate'
+        sgst:
+          type: number
+          description: SGST amount
+        cgst:
+          type: number
+          description: CGST amount
+        igst:
+          type: number
+          description: IGST amount
+        total:
+          type: number
+          description: Total amount including taxes
+        deliverables:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the influencer or participant
+              deliverables:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Unique identifier of the deliverable
+                    name:
+                      type: string
+                      description: Name of the deliverable
+                    desc:
+                      type: string
+                      description: Description of the deliverable
+                    platform:
+                      type: string
+                      description: Platform of the deliverable
+                    status:
+                      type: string
+                      description: Status of the deliverable

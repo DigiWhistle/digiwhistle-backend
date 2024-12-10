@@ -1,0 +1,36 @@
+tags:
+  name: Role
+  description: Endpoints for roles
+
+paths:
+  /v1/role:
+    get:
+      summary: Get all roles in DB
+      tags:
+        - Role
+
+      responses:
+        '200':
+          description: The data fetched successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    Role:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string

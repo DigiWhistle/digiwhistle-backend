@@ -1,0 +1,84 @@
+tags:
+  name: Agency
+  description: Endpoints for agency
+
+paths:
+  /v1/agency:
+    get:
+      summary: Get All agencies
+      tags:
+        - Agency
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: string
+
+        - in: query
+          name: limit
+          required: true
+          schema:
+            type: string
+
+        - in: query
+          name: approved
+          schema:
+            type: boolean
+
+        - in: query
+          name: rejected
+          schema:
+            type: boolean
+
+        - in: query
+          name: name
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: The data has been fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AgencyProfile'
+                      currentPage:
+                        type: number
+                      totalPages:
+                        type: number
+                      totalCount:
+                        type: number
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'

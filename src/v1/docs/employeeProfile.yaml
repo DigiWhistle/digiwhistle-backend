@@ -1,0 +1,222 @@
+tags:
+  name: EmployeeProfile
+  description: Endpoints for employee profiles
+
+paths:
+  /v1/employee/profile:
+    post:
+      summary: Add a new employee profile
+      tags:
+        - EmployeeProfile
+      requestBody:
+        description: Employee profile data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeProfileInput'
+      responses:
+        '201':
+          description: Employee profile created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/EmployeeProfileInput'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    get:
+      summary: Get employee profile by user ID
+      tags:
+        - EmployeeProfile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Employee profile fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/EmployeeProfile'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: Employee profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/employee/profile/{id}:
+    patch:
+      summary: update an employee profile
+      tags:
+        - EmployeeProfile
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the employee profile to update
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Employee profile data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeProfileUpdate'
+      responses:
+        '200':
+          description: Employee profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/EmployeeProfileInput'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    EmployeeProfileUpdate:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobileNo:
+          type: string
+        profilePic:
+          type: string
+        designation:
+          type: string
+        aadharNo:
+          type: string
+        panNo:
+          type: string
+        bankName:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankIfscCode:
+          type: string
+        bankAccountHolderName:
+          type: string
+
+    EmployeeProfileInput:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobileNo:
+          type: string
+        profilePic:
+          type: string
+        designation:
+          type: string
+        user:
+          type: string
+
+    EmployeeProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobileNo:
+          type: string
+        profilePic:
+          type: string
+        designation:
+          type: string
+        aadharNo:
+          type: string
+        panNo:
+          type: string
+        bankName:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankIfscCode:
+          type: string
+        bankAccountHolderName:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'

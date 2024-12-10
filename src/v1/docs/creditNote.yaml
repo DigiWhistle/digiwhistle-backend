@@ -1,0 +1,383 @@
+tags:
+  name: Credit Note
+  description: Endpoints for Credit Note
+
+paths:
+  /v1/invoice/creditnote:
+    post:
+      tags:
+        - Credit Note
+      summary: Add Credit Note
+      description: Add Credit Note
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteInput'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/creditnote/{id}:
+    get:
+      tags:
+        - Credit Note
+      summary: Get Credit Note
+      description: Get Credit Note
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+    patch:
+      tags:
+        - Credit Note
+      summary: Update Credit Note
+      description: Update Credit Note
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdate'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    delete:
+      tags:
+        - Credit Note
+      summary: Delete Credit Note
+      description: Delete Credit Note
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/creditnote/download:
+    get:
+      tags:
+        - Credit Note
+      summary: Download Credit Note
+      description: Download Credit Note
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                status:
+                  type: string
+                message:
+                  type: string
+                data:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    CreditNoteInput:
+      type: object
+      properties:
+        invoice:
+          type: string
+          format: uuid
+        gstTin:
+          type: string
+        creditNoteNo:
+          type: string
+        creditNoteDate:
+          type: string
+          format: date
+        amount:
+          type: number
+        sgst:
+          type: number
+        cgst:
+          type: number
+        igst:
+          type: number
+        total:
+          type: number
+        tds:
+          type: number
+        advance:
+          type: number
+        remarks:
+          type: string
+          nullable: true
+        month:
+          type: string
+      required:
+        - invoice
+        - gstTin
+        - creditNoteNo
+        - creditNoteDate
+        - amount
+        - sgst
+        - cgst
+        - igst
+        - total
+        - tds
+        - advance
+        - month
+
+    CreditNoteUpdate:
+      type: object
+      properties:
+        gstTin:
+          type: string
+        creditNoteNo:
+          type: string
+        creditNoteDate:
+          type: string
+          format: date
+        amount:
+          type: number
+        sgst:
+          type: number
+        cgst:
+          type: number
+        igst:
+          type: number
+        total:
+          type: number
+        tds:
+          type: number
+        advance:
+          type: number
+        remarks:
+          type: string
+          nullable: true
+        month:
+          type: string
+
+    CreditNote:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Credit note ID
+        invoice:
+          type: string
+          format: uuid
+          description: Sale invoice
+        gstTin:
+          type: string
+          description: GST TIN
+        creditNoteNo:
+          type: string
+          description: Credit note number
+        creditNoteDate:
+          type: string
+          format: date-time
+          description: Credit note date
+        amount:
+          type: number
+          description: Credit note amount
+        sgst:
+          type: number
+          description: SGST amount
+        cgst:
+          type: number
+          description: CGST amount
+        igst:
+          type: number
+          description: IGST amount
+        total:
+          type: number
+          description: Total amount
+        tds:
+          type: number
+          description: TDS amount
+        advance:
+          type: number
+          description: Advance amount
+        remarks:
+          type: string
+          description: Remarks
+        month:
+          type: string
+          description: Month
+        createdAt:
+          type: string
+          format: date-time
+          description: Created at
+        updatedAt:
+          type: string
+          format: date-time
+          description: Updated at

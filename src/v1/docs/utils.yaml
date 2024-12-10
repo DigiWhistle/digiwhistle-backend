@@ -1,0 +1,14 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    messageModel:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: string

@@ -1,0 +1,234 @@
+tags:
+  name: BrandProfile
+  description: Endpoints for brand profiles
+
+paths:
+  /v1/brand/profile:
+    post:
+      summary: Add a new brand profile
+      tags:
+        - BrandProfile
+      requestBody:
+        description: Brand profile data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrandProfileInput'
+      responses:
+        '201':
+          description: Brand profile created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/BrandProfileInput'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    # get:
+    #   summary: Get brand profile by user ID
+    #   tags:
+    #     - BrandProfile
+
+    #   responses:
+    #     '200':
+    #       description: Brand profile fetched successfully
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: object
+    #             properties:
+    #               message:
+    #                 type: string
+    #               status:
+    #                 type: string
+    #               data:
+    #                 $ref: '#/components/schemas/BrandProfile'
+    #     '400':
+    #       description: Bad Request
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/messageModel'
+    #     '401':
+    #       description: Unauthorized
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/messageModel'
+    #     '404':
+    #       description: Brand profile not found
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/messageModel'
+    #     '500':
+    #       description: Internal Server Error
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/messageModel'
+
+  /v1/brand/profile/{id}:
+    patch:
+      summary: Add a new brand profile
+      tags:
+        - BrandProfile
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the brand profile to update
+      requestBody:
+        description: Brand profile data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrandProfileUpdate'
+      responses:
+        '200':
+          description: Brand profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/BrandProfileUpdate'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+components:
+  schemas:
+    BrandProfileUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        pocFirstName:
+          type: string
+        pocLastName:
+          type: string
+        mobileNo:
+          type: string
+        websiteURL:
+          type: string
+        profilePic:
+          type: string
+        panNo:
+          type: string
+        aadharNo:
+          type: string
+        gstNo:
+          type: string
+        msmeNo:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        pincode:
+          type: string
+        address:
+          type: string
+
+    BrandProfileInput:
+      type: object
+      properties:
+        name:
+          type: string
+        pocFirstName:
+          type: string
+        pocLastName:
+          type: string
+        mobileNo:
+          type: string
+        websiteURL:
+          type: string
+        user:
+          type: string
+
+    BrandProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        pocFirstName:
+          type: string
+        pocLastName:
+          type: string
+        mobileNo:
+          type: string
+        websiteURL:
+          type: string
+        panNo:
+          type: string
+        aadharNo:
+          type: string
+        gstNo:
+          type: string
+        msmeNo:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        pincode:
+          type: string
+        address:
+          type: string

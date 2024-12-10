@@ -1,0 +1,721 @@
+tags:
+  name: Influencer
+  description: Endpoints for influencer
+
+paths:
+  /v1/influencer:
+    post:
+      summary: Add a new Influencer
+      tags:
+        - Influencer
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Influencer data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InfluencerInput'
+      responses:
+        '200':
+          description: Influencer created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    get:
+      summary: Get all influencer
+      tags:
+        - Influencer
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: platform
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [youtube, instagram, x, linkedin]
+          description: The social media platform of the influencer.
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [exclusive, non-exclusive, all]
+          description: Type of influencer.
+        - name: niche
+          in: query
+          schema:
+            type: string
+            enum: [finance, non-finance, all]
+          description: Niche of the influencer.
+        - name: followers
+          in: query
+          schema:
+            type: string
+            enum: [lessThan250K, moreThan750K, 250KTo500K, 500KTo750K]
+          description: Filter influencer by the number of followers.
+        - name: refresh
+          in: query
+          schema:
+            type: string
+            enum: [true]
+          description: refresh the profiles in a page
+        - name: sortEr
+          in: query
+          schema:
+            type: string
+            enum: [true]
+          description: sort based on Engagement Rate
+        - name: approved
+          in: query
+          schema:
+            type: string
+            enum: [true]
+
+        - name: rejected
+          in: query
+          schema:
+            type: string
+            enum: [true]
+
+        - name: name
+          in: query
+          schema:
+            type: string
+
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Page number for pagination.
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Number of influencer per page.
+      responses:
+        '200':
+          description: Influencer fetched successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/YoutubeInfluencerResponse'
+                  - $ref: '#/components/schemas/InstagramInfluencerResponse'
+                  - $ref: '#/components/schemas/TwitterInfluencerResponse'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/influencer/stats:
+    get:
+      summary: stats for influencer
+      tags:
+        - Influencer
+      security:
+        - bearerAuth: []
+
+      responses:
+        '200':
+          description: Fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Card'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+  /v1/influencer/request:
+    get:
+      summary: request for influencer
+      tags:
+        - Influencer
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: platform
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [youtube, instagram, x]
+          description: The social media platform of the influencer.
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Page number for pagination.
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Number of influencer per page.
+      responses:
+        '200':
+          description: Influencer fetched successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/YoutubeInfluencerRequestResponse'
+                  - $ref: '#/components/schemas/InstagramInfluencerRequestResponse'
+                  - $ref: '#/components/schemas/TwitterInfluencerRequestResponse'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/influencer/invite:
+    post:
+      summary: invite influencer
+      tags:
+        - Influencer
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Invite Influencer data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteInfluencerInput'
+      responses:
+        '200':
+          description: Influencer created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/influencer/explore:
+    get:
+      summary: explore influencer
+      tags:
+        - Influencer
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: url
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The social media platform url.
+      responses:
+        '200':
+          description: Data fetched Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cards:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Card'
+                  name:
+                    type: string
+                  desc:
+                    type: string
+                  profilePic:
+                    type: string
+                  profileUrl:
+                    type: string
+                  metric:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      value:
+                        type: number
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/influencer/list:
+    get:
+      summary: Get all Influencer
+      tags:
+        - Influencer
+      responses:
+        '200':
+          description: Influencer fetched successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    youtubeUrl:
+                      type: string
+                    instagramUrl:
+                      type: string
+                    twitterUrl:
+                      type: string
+                    profilePic:
+                      type: string
+                    linkedInUrl:
+                      type: string
+                    niche:
+                      type: string
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    InfluencerInput:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobileNo:
+          type: string
+        twitterURL:
+          type: string
+        linkedInURL:
+          type: string
+        instagramURL:
+          type: string
+        youtubeURL:
+          type: string
+        email:
+          type: string
+
+    InviteInfluencerInput:
+      type: object
+      properties:
+        message:
+          type: string
+        subject:
+          type: string
+        emails:
+          type: array
+          items:
+            type: string
+
+    YoutubeInfluencerResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              profileId:
+                type: string
+              name:
+                type: string
+              email:
+                type: string
+              isPaused:
+                type: boolean
+              isVerified:
+                type: boolean
+              mobileNo:
+                type: string
+              exclusive:
+                type: boolean
+              pay:
+                type: number
+              hideFrom:
+                type: string
+              userId:
+                type: string
+              views:
+                type: string
+              subscribers:
+                type: string
+              videos:
+                type: string
+              profileUrl:
+                type: string
+              isApproved:
+                type: boolean
+              requestDate:
+                type: string
+                format: date-time
+
+        totalPages:
+          type: integer
+        totalCount:
+          type: integer
+        currentPage:
+          type: integer
+
+    InstagramInfluencerResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              profileId:
+                type: string
+              name:
+                type: string
+              email:
+                type: string
+              isPaused:
+                type: boolean
+              isVerified:
+                type: boolean
+              mobileNo:
+                type: string
+              exclusive:
+                type: boolean
+              pay:
+                type: number
+              hideFrom:
+                type: string
+              userId:
+                type: string
+              followers:
+                type: string
+              likes:
+                type: string
+              comments:
+                type: string
+              views:
+                type: string
+              engagementRate:
+                type: number
+              percentageFakeFollowers:
+                type: number
+              profileUrl:
+                type: string
+              isApproved:
+                type: boolean
+              requestDate:
+                type: string
+                format: date-time
+        totalPages:
+          type: integer
+        totalCount:
+          type: integer
+        currentPage:
+          type: integer
+
+    TwitterInfluencerResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              profileId:
+                type: string
+              name:
+                type: string
+              email:
+                type: string
+              isPaused:
+                type: boolean
+              isVerified:
+                type: boolean
+              mobileNo:
+                type: string
+              exclusive:
+                type: boolean
+              pay:
+                type: number
+              hideFrom:
+                type: string
+              userId:
+                type: string
+              followers:
+                type: string
+              views:
+                type: string
+              tweets:
+                type: string
+              replyCount:
+                type: string
+              retweets:
+                type: string
+              profileUrl:
+                type: string
+              isApproved:
+                type: boolean
+              requestDate:
+                type: string
+                format: date-time
+        totalPages:
+          type: integer
+        totalCount:
+          type: integer
+        currentPage:
+          type: integer
+
+    YouTubeInfluencerRequestResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            profileId:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            isApproved:
+              type: boolean
+            mobileNo:
+              type: string
+            userId:
+              type: string
+            views:
+              type: string
+            subscribers:
+              type: string
+            videos:
+              type: string
+            profileUrl:
+              type: string
+              format: uri
+            requestDate:
+              type: string
+              format: date-time
+        totalPages:
+          type: integer
+        totalCount:
+          type: integer
+        currentPage:
+          type: integer
+
+    InstagramInfluencerRequestResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            profileId:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            isApproved:
+              type: boolean
+            mobileNo:
+              type: string
+            userId:
+              type: string
+            followers:
+              type: string
+            likes:
+              type: string
+            comments:
+              type: string
+            views:
+              type: string
+            engagementRate:
+              type: object
+              properties:
+                value:
+                  type: number
+                label:
+                  type: string
+            percentageFakeFollowers:
+              type: number
+            profileUrl:
+              type: string
+              format: uri
+            requestDate:
+              type: string
+              format: date-time
+        totalPages:
+          type: integer
+        totalCount:
+          type: integer
+        currentPage:
+          type: integer
+
+    TwitterInfluencerRequestResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            profileId:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            isApproved:
+              type: boolean
+            mobileNo:
+              type: string
+            userId:
+              type: string
+            followers:
+              type: string
+            views:
+              type: string
+            tweets:
+              type: string
+            replyCount:
+              type: string
+            retweets:
+              type: string
+            profileUrl:
+              type: string
+              format: uri
+            requestDate:
+              type: string
+              format: date-time
+              example: '2024-08-19T12:34:56Z'
+        totalPages:
+          type: integer
+        totalCount:
+          type: integer
+        currentPage:
+          type: integer

@@ -1,0 +1,793 @@
+tags:
+  name: Payroll
+  description: Endpoints for payroll managements
+
+paths:
+  /v1/payroll:
+    post:
+      summary: Add a new payroll
+      tags:
+        - Payroll
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Payroll data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayrollInput'
+      responses:
+        '201':
+          description: Payroll created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Payroll'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+    get:
+      summary: get all payrolls
+      tags:
+        - Payroll
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: page
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: searchQuery
+          schema:
+            type: string
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - Pending
+              - All Paid
+          required: true
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          required: true
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          required: true
+      responses:
+        '200':
+          description: Payroll fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    oneOf:
+                      - type: array
+                        items:
+                          $ref: '#/components/schemas/PayrollDetails'
+                      - type: object
+                        properties:
+                          data:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/PayrollDetails'
+                          currentPage:
+                            type: number
+                          totalPages:
+                            type: number
+                          totalCount:
+                            type: number
+
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/payroll/{id}:
+    get:
+      summary: get a payroll
+      tags:
+        - Payroll
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the payroll to get
+      responses:
+        '200':
+          description: Payroll fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Payroll'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    patch:
+      summary: update a payroll
+      tags:
+        - Payroll
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the payroll to update
+      requestBody:
+        description: Payroll data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayrollUpdate'
+      responses:
+        '200':
+          description: Payroll created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Payroll'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    delete:
+      summary: delete a payroll
+      tags:
+        - Payroll
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the payroll to delete
+      responses:
+        '200':
+          description: Payroll created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/payroll/release:
+    post:
+      summary: release salary
+      tags:
+        - Payroll
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the payroll to release
+      responses:
+        '200':
+          description: Payroll created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/payroll/employee:
+    get:
+      summary: get all employees payroll
+      tags:
+        - Payroll
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: page
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          required: true
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          required: true
+      responses:
+        '200':
+          description: Payroll fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EmployeePayroll'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/payroll/download:
+    get:
+      summary: download payroll
+      tags:
+        - Payroll
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the payroll to download
+      responses:
+        '200':
+          description: Payroll fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/payroll/share:
+    post:
+      summary: share payroll
+      tags:
+        - Payroll
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Payroll data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayrollShare'
+      responses:
+        '200':
+          description: Payroll created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    PayrollDetails:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        basic:
+          type: number
+        hra:
+          type: number
+        others:
+          type: number
+        ctc:
+          type: number
+        employmentType:
+          type: string
+          enum:
+            - Full Time
+            - Internship
+            - None
+        salaryMonth:
+          type: string
+        tds:
+          type: number
+        incentive:
+          type: number
+        workingDays:
+          type: number
+        bankName:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankIfscCode:
+          type: string
+        panNo:
+          type: string
+        grossPay:
+          type: number
+        finalPay:
+          type: number
+
+    Payroll:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: The id of the payroll
+        employeeProfile:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: The employee Id
+        basic:
+          type: number
+          example: 10000
+          description: The basic salary
+        hra:
+          type: number
+          example: 5000
+          description: The house rent allowance
+        others:
+          type: number
+          example: 2000
+          description: The other allowance
+        ctc:
+          type: number
+          example: 25000
+          description: The cost to company
+        EmploymentType:
+          type: string
+          enum:
+            - Full Time
+            - Internship
+            - None
+          example: Full Time
+          description: The type of employment
+        salaryMonth:
+          type: number
+          example: 12
+          description: The salary month
+        incentive:
+          type: number
+          example: 0
+          description: The incentive given
+        workingDays:
+          type: number
+          example: 31
+          description: The working days in a month
+        createdAt:
+          type: string
+          format: date-time
+          description: The created date of the payroll
+        updatedAt:
+          type: string
+          format: date-time
+          description: The updated date of the payroll
+
+    PayrollInput:
+      type: object
+      properties:
+        employeeProfile:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: The id of the employee profile
+        basic:
+          type: number
+          example: 10000
+          description: The basic salary
+        hra:
+          type: number
+          example: 5000
+          description: The house rent allowance
+        others:
+          type: number
+          example: 2000
+          description: The other allowance
+        ctc:
+          type: number
+          example: 25000
+          description: The cost to company
+        employmentType:
+          type: string
+          enum:
+            - Full Time
+            - Internship
+            - None
+          example: Full Time
+          description: The type of employment
+        tds:
+          type: number
+          example: 5%
+          description: The tax deducted at source
+      required:
+        - employeeProfile
+        - basic
+        - hra
+        - others
+        - ctc
+        - EmploymentType
+        - salaryMonth
+        - tds
+
+    PayrollUpdate:
+      type: object
+      properties:
+        basic:
+          type: number
+          example: 15000
+          description: The basic salary
+        hra:
+          type: number
+          example: 5000
+          description: The house rent allowance
+        others:
+          type: number
+          example: 2000
+          description: The other allowance
+        ctc:
+          type: number
+          example: 25000
+          description: The cost to company
+        employmentType:
+          type: string
+          enum:
+            - Full Time
+            - Internship
+            - None
+          example: Full Time
+          description: The type of employment
+        tds:
+          type: number
+          example: 5%
+          description: The tax deducted at source
+        workingDays:
+          type: number
+          example: 31
+          description: The working days in a month
+        incentive:
+          type: number
+          example: 1000
+          description: The incentive given
+
+    EmployeePayroll:
+      type: object
+      properties:
+        salaryMonth:
+          type: number
+          example: 12
+          description: The salary month
+        workingDays:
+          type: number
+          example: 31
+          description: The working days in a month
+        basic:
+          type: number
+          example: 15000
+          description: The basic salary
+        hra:
+          type: number
+          example: 5000
+          description: The house rent allowance
+        others:
+          type: number
+          example: 2000
+          description: The other allowance
+        ctc:
+          type: number
+          example: 25000
+          description: The cost to company
+        tds:
+          type: number
+          example: 500
+          description: The tax deducted at source
+        incentive:
+          type: number
+          example: 1000
+          description: The incentive given
+        grossPay:
+          type: number
+          example: 30000
+          description: The gross pay
+        finalPay:
+          type: number
+          example: 28000
+          description: The final pay after tds
+        status:
+          type: string
+          example: All Received
+          description: The status of the payroll
+        paymentDate:
+          type: string
+          format: date-time
+          example: '2022-09-01T00:00:00.000Z'
+          description: The date of payment
+
+    PayrollShare:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: The id of the payroll
+        emails:
+          type: array
+          items:
+            type: string
+            example: 123e4567-e89b-12d3-a456-426614174000
+            description: The id of the employee
+        subject:
+          type: string
+          example: Subject
+          description: The subject of the email
+        message:
+          type: string
+          example: Message
+          description: The message of the email

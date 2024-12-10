@@ -1,0 +1,751 @@
+tags:
+  name: SaleInvoice
+  description: Endpoints for sale invoice managements
+
+paths:
+  /v1/invoice/sale:
+    get:
+      tags:
+        - SaleInvoice
+      summary: Get sale invoices
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: startDate
+          schema:
+            type: string
+          required: true
+          description: start date of the report
+        - in: query
+          name: endDate
+          schema:
+            type: string
+          required: true
+          description: end date of the report
+        - in: query
+          name: invoiceNo
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: number
+                      totalPages:
+                        type: number
+                      totalCount:
+                        type: number
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SaleInvoiceDTO'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    post:
+      tags:
+        - SaleInvoice
+      summary: Add new sale invoice
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleInvoiceInput'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/SaleInvoice'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/sale/{id}:
+    get:
+      tags:
+        - SaleInvoice
+      summary: Get sale invoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the sale invoice
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/SaleInvoice'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+    patch:
+      tags:
+        - SaleInvoice
+      summary: Update sale invoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the sale invoice to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleInvoiceUpdate'
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/SaleInvoice'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    delete:
+      tags:
+        - SaleInvoice
+      summary: Delete sale invoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the sale invoice to delete
+      responses:
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/sale/share:
+    post:
+      tags:
+        - SaleInvoice
+      summary: Share sale invoice
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareInvoiceRequest'
+      responses:
+        200:
+          description: Shared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/sale/download:
+    get:
+      tags:
+        - SaleInvoice
+      summary: Download sale invoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the sale invoice
+      responses:
+        200:
+          description: Downloaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    post:
+      tags:
+        - SaleInvoice
+      summary: Download sale invoice report
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startDate:
+                  type: string
+                  format: date-time
+                endDate:
+                  type: string
+                  format: date-time
+      responses:
+        200:
+          description: Downloaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    SaleInvoiceInput:
+      type: object
+      properties:
+        campaign:
+          type: string
+          format: uuid
+          nullable: false
+          description: Campaign ID
+        gstTin:
+          type: string
+          nullable: false
+          description: GST TIN
+        invoiceNo:
+          type: string
+          nullable: false
+          description: Invoice number
+        invoiceDate:
+          type: string
+          format: date-time
+          nullable: false
+          description: Invoice date
+        amount:
+          type: number
+          nullable: false
+          description: Invoice amount
+        sgst:
+          type: number
+          nullable: false
+          description: SGST amount
+        cgst:
+          type: number
+          nullable: false
+          description: CGST amount
+        igst:
+          type: number
+          nullable: false
+          description: IGST amount
+        total:
+          type: number
+          nullable: false
+          description: Total amount
+        tds:
+          type: number
+          nullable: false
+          description: TDS amount
+        received:
+          type: number
+          nullable: false
+          description: Received amount
+        balanceAmount:
+          type: number
+          nullable: false
+          description: Balance amount
+        month:
+          type: string
+          nullable: false
+          description: Month
+        paymentStatus:
+          type: string
+          enum:
+            - All Received
+            - Pending
+          nullable: false
+          description: Payment status
+      required:
+        - campaign
+        - gstTin
+        - invoiceNo
+        - invoiceDate
+        - amount
+        - sgst
+        - cgst
+        - igst
+        - total
+        - tds
+        - received
+        - balanceAmount
+        - month
+        - paymentStatus
+
+    SaleInvoiceUpdate:
+      type: object
+      properties:
+        gstTin:
+          type: string
+          nullable: false
+          description: GST TIN
+        invoiceNo:
+          type: string
+          nullable: false
+          description: Invoice number
+        invoiceDate:
+          type: string
+          format: date-time
+          nullable: false
+          description: Invoice date
+        amount:
+          type: number
+          nullable: false
+          description: Invoice amount
+        sgst:
+          type: number
+          nullable: false
+          description: SGST amount
+        cgst:
+          type: number
+          nullable: false
+          description: CGST amount
+        igst:
+          type: number
+          nullable: false
+          description: IGST amount
+        total:
+          type: number
+          nullable: false
+          description: Total amount
+        tds:
+          type: number
+          nullable: false
+          description: TDS amount
+        received:
+          type: number
+          nullable: false
+          description: Received amount
+        balanceAmount:
+          type: number
+          nullable: false
+          description: Balance amount
+        month:
+          type: string
+          nullable: false
+          description: Month
+        paymentStatus:
+          type: string
+          enum:
+            - All Received
+            - Pending
+          nullable: false
+          description: Payment status
+
+    SaleInvoiceDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Sale invoice ID
+        invoiceNumber:
+          type: string
+          description: Invoice number
+        issueDate:
+          type: string
+          format: date-time
+          description: Issue date
+        amount:
+          type: number
+          description: Invoice amount
+        status:
+          type: string
+          enum:
+            - All Received
+            - Pending
+          description: Payment status
+        month:
+          type: string
+          description: Month
+        gstTin:
+          type: string
+          description: GST TIN
+        tds:
+          type: number
+          description: TDS amount
+        balance:
+          type: number
+          description: Balance amount
+        received:
+          type: number
+          description: Received amount
+        brandName:
+          type: string
+          description: Brand name
+        code:
+          type: string
+          description: Campaign code
+        name:
+          type: string
+          description: Campaign name
+        campaignDuration:
+          type: string
+          description: Campaign duration
+        sgst:
+          type: number
+          description: SGST amount
+        cgst:
+          type: number
+          description: CGST amount
+        igst:
+          type: number
+          description: IGST amount
+        total:
+          type: number
+          description: Total amount
+        deliverables:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deliverable'
+          description: Deliverables
+
+    Deliverable:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Deliverable name
+        deliverables:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliverableItem'
+          description: Deliverable items
+
+    DeliverableItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Deliverable item ID
+        name:
+          type: string
+          description: Deliverable item name
+        desc:
+          type: string
+          description: Deliverable item description
+        platform:
+          type: string
+          description: Deliverable item platform
+        status:
+          type: string
+          description: Deliverable item status
+
+    SaleInvoice:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Sale invoice ID
+        campaign:
+          type: string
+          description: Campaign
+        gstTin:
+          type: string
+          description: GST TIN
+        invoiceNo:
+          type: string
+          description: Invoice number
+        invoiceDate:
+          type: string
+          format: date-time
+          description: Invoice date
+        amount:
+          type: number
+          description: Invoice amount
+        sgst:
+          type: number
+          description: SGST amount
+        cgst:
+          type: number
+          description: CGST amount
+        igst:
+          type: number
+          description: IGST amount
+        total:
+          type: number
+          description: Total amount
+        tds:
+          type: number
+          description: TDS amount
+        received:
+          type: number
+          description: Received amount
+        balanceAmount:
+          type: number
+          description: Balance amount
+        month:
+          type: string
+          description: Month
+        paymentStatus:
+          type: string
+          enum:
+            - All Received
+            - Pending
+          description: Payment status
+        createdAt:
+          type: string
+          format: date-time
+          description: Created at
+        updatedAt:
+          type: string
+          format: date-time
+          description: Updated at

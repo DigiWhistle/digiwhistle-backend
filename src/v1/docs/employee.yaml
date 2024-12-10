@@ -1,0 +1,57 @@
+tags:
+  - name: Employee
+    description: Endpoints for employees
+
+paths:
+  /v1/employee/search:
+    get:
+      summary: Search employee profiles
+      security:
+        - bearerAuth: []
+      tags:
+        - Employee
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: The name of the employee
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: The email of the employee
+      responses:
+        '200':
+          description: Employee profile fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EmployeeProfile'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'

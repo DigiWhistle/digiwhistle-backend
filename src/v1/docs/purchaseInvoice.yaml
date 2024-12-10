@@ -1,0 +1,715 @@
+tags:
+  name: PurchaseInvoice
+  description: Endpoints for purchase invoice managements
+
+paths:
+  /v1/invoice/purchase:
+    post:
+      tags:
+        - PurchaseInvoice
+      summary: Add new purchase invoice
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseInvoiceInput'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/PurchaseInvoice'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    get:
+      tags:
+        - PurchaseInvoice
+      summary: Get purchase invoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: startDate
+          schema:
+            type: string
+          required: true
+          description: start date of the report
+        - in: query
+          name: endDate
+          schema:
+            type: string
+          required: true
+          description: end date of the report
+        - in: query
+          name: invoiceNo
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: number
+                      totalPages:
+                        type: number
+                      totalCount:
+                        type: number
+                      data:
+                        oneOf:
+                          - type: array
+                            items:
+                              $ref: '#/components/schemas/PurchaseInvoiceForInfluencerAndAgencyDTO'
+                          - type: array
+                            items:
+                              $ref: '#/components/schemas/PurchaseInvoiceForAdminDTO'
+
+  /v1/invoice/purchase/{id}:
+    get:
+      tags:
+        - PurchaseInvoice
+      summary: Get purchase invoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the purchase invoice
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/PurchaseInvoice'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+    patch:
+      tags:
+        - PurchaseInvoice
+      summary: Update purchase invoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the purchase invoice to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseInvoiceUpdate'
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/PurchaseInvoice'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    delete:
+      tags:
+        - PurchaseInvoice
+      summary: Delete purchase invoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the purchase invoice to delete
+      responses:
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/purchase/share:
+    post:
+      tags:
+        - PurchaseInvoice
+      summary: Share purchase invoice
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareInvoiceRequest'
+      responses:
+        200:
+          description: Shared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/purchase/download:
+    post:
+      summary: Purchase Invoice Report
+      tags:
+        - PurchaseInvoice
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startDate:
+                  type: string
+                  format: date-time
+                endDate:
+                  type: string
+                  format: date-time
+      responses:
+        200:
+          description: Downloaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/invoice/purchase/release:
+    post:
+      tags:
+        - PurchaseInvoice
+      summary: Release payment for purchase invoice
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the purchase invoice
+      responses:
+        200:
+          description: Released
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    PurchaseInvoiceInput:
+      type: object
+      properties:
+        campaign:
+          type: string
+          format: uuid
+          nullable: false
+        invoiceNo:
+          type: string
+          nullable: false
+        pan:
+          type: string
+          nullable: false
+        amount:
+          type: number
+          nullable: false
+        igst:
+          type: number
+          nullable: false
+        cgst:
+          type: number
+          nullable: false
+        sgst:
+          type: number
+          nullable: false
+        totalAmount:
+          type: number
+          nullable: false
+        tds:
+          type: number
+          nullable: false
+        finalAmount:
+          type: number
+          nullable: false
+        amountToBeReceived:
+          type: number
+          nullable: false
+        paymentTerms:
+          type: string
+          enum:
+            - 0 Days
+            - 15 Days
+            - 30 Days
+          nullable: false
+        paymentStatus:
+          type: string
+          enum:
+            - Pending
+            - All Received
+          nullable: false
+        file:
+          type: string
+          nullable: true
+        influencerProfile:
+          type: string
+          format: uuid
+          nullable: true
+        agencyProfile:
+          type: string
+          format: uuid
+          nullable: true
+        invoiceDate:
+          type: string
+          format: date-time
+          nullable: false
+
+    PurchaseInvoiceUpdate:
+      type: object
+      properties:
+        invoiceNo:
+          type: string
+          nullable: false
+        pan:
+          type: string
+          nullable: false
+        amount:
+          type: number
+          nullable: false
+        igst:
+          type: number
+          nullable: false
+        cgst:
+          type: number
+          nullable: false
+        sgst:
+          type: number
+          nullable: false
+        totalAmount:
+          type: number
+          nullable: false
+        tds:
+          type: number
+          nullable: false
+        finalAmount:
+          type: number
+          nullable: false
+        amountToBeReceived:
+          type: number
+          nullable: false
+        paymentTerms:
+          type: string
+          enum:
+            - 0 Days
+            - 15 Days
+            - 30 Days
+          nullable: false
+        paymentStatus:
+          type: string
+          enum:
+            - Pending
+            - All Received
+          nullable: false
+        file:
+          type: string
+          nullable: true
+
+    PurchaseInvoice:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        campaign:
+          type: string
+          format: uuid
+        invoiceNo:
+          type: string
+        pan:
+          type: string
+        amount:
+          type: number
+        igst:
+          type: number
+        cgst:
+          type: number
+        sgst:
+          type: number
+        totalAmount:
+          type: number
+        tds:
+          type: number
+        finalAmount:
+          type: number
+        amountToBeReceived:
+          type: number
+        paymentTerms:
+          type: string
+          enum:
+            - 0 Days
+            - 15 Days
+            - 30 Days
+        paymentStatus:
+          type: string
+          enum:
+            - Pending
+              - All Received
+        file:
+          type: string
+        influencerProfile:
+          type: string
+          format: uuid
+        agencyProfile:
+          type: string
+          format: uuid
+        invoiceDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ShareInvoiceRequest:
+      type: object
+      properties:
+        invoiceId:
+          type: string
+          format: uuid
+          nullable: false
+        email:
+          type: array
+          items:
+            type: string
+        subject:
+          type: string
+        message:
+          type: string
+
+    PurchaseInvoiceForInfluencerAndAgencyDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        invoiceNo:
+          type: string
+        campaignCode:
+          type: string
+        campaignDuration:
+          type: string
+        campaignName:
+          type: string
+        brand:
+          type: string
+        invoiceDate:
+          type: string
+          format: date-time
+        finalAmount:
+          type: number
+        totalAmount:
+          type: number
+        igst:
+          type: number
+        cgst:
+          type: number
+        sgst:
+          type: number
+        totalInvoiceAmount:
+          type: number
+        tds:
+          type: number
+        amount:
+          type: number
+        amountToBeReceived:
+          type: number
+        balanceAmount:
+          type: number
+        PaymentStatus:
+          type: string
+        paymentTerms:
+          type: string
+
+    PurchaseInvoiceForAdminDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        invoiceNo:
+          type: string
+        campaignCode:
+          type: string
+        campaignDuration:
+          type: string
+        campaignName:
+          type: string
+        brand:
+          type: string
+        invoiceDate:
+          type: string
+          format: date-time
+        finalAmount:
+          type: number
+        totalAmount:
+          type: number
+        igst:
+          type: number
+        cgst:
+          type: number
+        sgst:
+          type: number
+        totalInvoiceAmount:
+          type: number
+        tds:
+          type: number
+        tdsPercentage:
+          type: number
+        tdsSection:
+          type: string
+        amount:
+          type: number
+        amountToBeReceived:
+          type: number
+        balanceAmount:
+          type: number
+        PaymentStatus:
+          type: string
+        paymentTerms:
+          type: string
+        category:
+          type: string
+        vendorName:
+          type: string

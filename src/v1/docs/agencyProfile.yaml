@@ -1,0 +1,251 @@
+tags:
+  name: AgencyProfile
+  description: Endpoints for agency profiles
+
+paths:
+  /v1/agency/profile:
+    post:
+      summary: Add a new agency profile
+      tags:
+        - AgencyProfile
+      requestBody:
+        description: Agency profile data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyProfileInput'
+      responses:
+        '201':
+          description: Agency profile created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/AgencyProfileInput'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    # get:
+    #   summary: Get agency profile by user ID
+    #   tags:
+    #     - AgencyProfile
+
+    #   responses:
+    #     '200':
+    #       description: Agency profile fetched successfully
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: object
+    #             properties:
+    #               message:
+    #                 type: string
+    #               status:
+    #                 type: string
+    #               data:
+    #                 $ref: '#/components/schemas/AgencyProfile'
+    #     '400':
+    #       description: Bad Request
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/messageModel'
+    #     '401':
+    #       description: Unauthorized
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/messageModel'
+    #     '404':
+    #       description: Brand profile not found
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/messageModel'
+    #     '500':
+    #       description: Internal Server Error
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/messageModel'
+
+  /v1/agency/profile/{id}:
+    patch:
+      summary: update a agency profile
+      tags:
+        - AgencyProfile
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the agency profile to update
+      requestBody:
+        description: Agency profile data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyProfileUpdate'
+      responses:
+        '200':
+          description: Agency profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/AgencyProfile'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    AgencyProfileUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        pocFirstName:
+          type: string
+        pocLastName:
+          type: string
+        mobileNo:
+          type: string
+        websiteURL:
+          type: string
+        profilePic:
+          type: string
+        aadharNo:
+          type: string
+        panNo:
+          type: string
+        gstNo:
+          type: string
+        msmeNo:
+          type: string
+        bankName:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankIfscCode:
+          type: string
+        bankAccountHolderName:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        pincode:
+          type: string
+
+    AgencyProfileInput:
+      type: object
+      properties:
+        name:
+          type: string
+        pocFirstName:
+          type: string
+        pocLastName:
+          type: string
+        mobileNo:
+          type: string
+        websiteURL:
+          type: string
+        user:
+          type: string
+
+    AgencyProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        pocFirstName:
+          type: string
+        pocLastName:
+          type: string
+        mobileNo:
+          type: string
+        websiteURL:
+          type: string
+        aadharNo:
+          type: string
+        panNo:
+          type: string
+        gstNo:
+          type: string
+        msmeNo:
+          type: string
+        bankName:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankIfscCode:
+          type: string
+        bankAccountHolderName:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        pincode:
+          type: string

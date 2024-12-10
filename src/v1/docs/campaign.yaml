@@ -1,0 +1,933 @@
+tags:
+  name: Campaign
+  description: Endpoints for campaign
+
+paths:
+  /v1/campaign:
+    post:
+      summary: Add a new campaign
+      tags:
+        - Campaign
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddCampaignSchema'
+      responses:
+        '201':
+          description: Campaign created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    example: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    put:
+      summary: update an existing campaign card
+      tags:
+        - Campaign
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCampaignCards'
+      responses:
+        '200':
+          description: Campaign updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    example: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/campaign/{id}:
+    get:
+      summary: fetch an existing campaign
+      tags:
+        - Campaign
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Campaign ID
+      responses:
+        '200':
+          description: fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Campaign'
+
+    patch:
+      summary: Update an existing campaign
+      tags:
+        - Campaign
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Campaign ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCampaignSchema'
+      responses:
+        '200':
+          description: Campaign updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    example: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    delete:
+      summary: Delete a campaign
+      tags:
+        - Campaign
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Campaign ID
+      responses:
+        '200':
+          description: Campaign deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/campaign/stats:
+    get:
+      summary: fetch all stats for campaign
+      tags:
+        - Campaign
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startTime
+          required: true
+          schema:
+            type: string
+          description: The start time of the timeline
+        - in: query
+          name: endTime
+          required: true
+          schema:
+            type: string
+          description: The end time of the timeline
+      responses:
+        '200':
+          description: fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Card'
+
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/campaign/search:
+    get:
+      summary: Search campaign
+      tags:
+        - Campaign
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: code
+          required: true
+          schema:
+            type: string
+          description: The code of campaign
+        - in: query
+          name: type
+          schema:
+            type: string
+          description: The type of query
+      responses:
+        '200':
+          description: fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                      code:
+                        type: string
+                      brand:
+                        type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/campaign/release/incentive:
+    post:
+      summary: Release a campaign incentive
+      tags:
+        - Campaign
+      security:
+        - bearerAuth: []
+      description: This endpoint will release the incentive for a campaign
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Campaign ID
+      responses:
+        '200':
+          description: fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+  /v1/campaign/report:
+    get:
+      summary: Get campaign report
+      tags:
+        - Campaign
+      parameters:
+        - in: query
+          name: id
+
+          schema:
+            type: string
+          description: brand Id
+        - in: query
+          name: campaignId
+
+          schema:
+            type: string
+          description: campaign Id
+      responses:
+        '200':
+          description: fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: object
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/campaign/sendEmail:
+    post:
+      summary: Send campaign email
+      tags:
+        - Campaign
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Campaign Participant ID
+      responses:
+        '200':
+          description: fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+components:
+  schemas:
+    AddCampaignSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Apollo'
+        code:
+          type: string
+          example: 'code'
+        brand:
+          type: string
+          format: 'uuid'
+          example: '22068de9-c729-4f3e-9c5b-b22085f104c6'
+        brandName:
+          type: string
+          example: 'Uber'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        commercial:
+          type: number
+        paymentStatus:
+          type: string
+          enum: [All Paid, Pending]
+        details:
+          type: string
+          nullable: true
+        manager:
+          type: string
+          example: '0088ab76-a750-4d4d-b705-a4a2b439861c'
+        incentiveWinner:
+          oneOf:
+            - type: string
+            - type: 'null'
+          example: '0088ab76-a750-4d4d-b705-a4a2b439861c'
+        invoiceNo:
+          oneOf:
+            - type: string
+            - type: 'null'
+          example: 'XBR2340'
+        participants:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              roleId:
+                type: number
+              profileId:
+                type: string
+              email:
+                type: string
+            required:
+              - id
+              - roleId
+              - profileId
+              - email
+          example:
+            - id: '1ff5afb3-c414-40fd-98bb-dd592644bbfb'
+              roleId: 5
+              profileId: '1ff5afb3-c414-40fd-98bb-dd592644bbfb'
+              email: 'test@ageny.com'
+      required:
+        - name
+        - code
+        - brandName
+        - brand
+        - startDate
+        - endDate
+        - commercial
+        - manager
+        - participants
+
+    UpdateCampaignSchema:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+          example: 'code'
+        brand:
+          type: string
+          format: 'uuid'
+          example: 'dad749c8-fb7d-44af-bdc2-7cf5fdacff2c'
+        brandName:
+          type: string
+          example: 'Uber'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        commercial:
+          type: number
+        status:
+          type: string
+          enum: [All Paid, Pending]
+        details:
+          type: string
+          nullable: true
+        manager:
+          type: string
+          format: 'uuid'
+          example: 'dad749c8-fb7d-44af-bdc2-7cf5fdacff2c'
+        incentiveWinner:
+          oneOf:
+            - type: string
+            - type: 'null'
+          format: 'uuid'
+          example: 'dad749c8-fb7d-44af-bdc2-7cf5fdacff2c'
+        invoiceNo:
+          oneOf:
+            - type: string
+            - type: 'null'
+          example: 'XBR2340'
+        participants:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              roleId:
+                type: number
+              profileId:
+                type: string
+              email:
+                type: string
+            required:
+              - id
+              - roleId
+              - profileId
+              - email
+      required:
+        - name
+        - code
+        - brandName
+        - brand
+        - startDate
+        - endDate
+        - commercial
+        - manager
+        - participants
+
+    UpdateCampaignCards:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        code:
+          type: string
+        brandName:
+          type: string
+        brand:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        commercial:
+          type: number
+        incentiveWinner:
+          type: string
+        status:
+          type: string
+        participants:
+          type: array
+          items:
+            oneOf:
+              - type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                  name:
+                    type: string
+                  exclusive:
+                    type: boolean
+                  commercialBrand:
+                    type: number
+                  commercialCreator:
+                    type: number
+                  toBeGiven:
+                    type: number
+                  margin:
+                    type: number
+                  paymentStatus:
+                    type: string
+                    enum:
+                      - PENDING
+                      - PAID
+                  invoiceStatus:
+                    type: string
+                    enum:
+                      - PENDING
+                      - ISSUED
+                  deliverables:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                        platform:
+                          type: string
+                          enum:
+                            - INSTAGRAM
+                            - YOUTUBE
+                            - TWITTER
+                        campaignStatus:
+                          type: string
+                          enum:
+                            - ACTIVE
+                            - COMPLETED
+                        deliverableLink:
+                          type: string
+                        er:
+                          type: number
+                          nullable: true
+                        cpv:
+                          type: number
+                          nullable: true
+                      required:
+                        - id
+                        - title
+                        - platform
+                        - campaignStatus
+                        - deliverableLink
+                required:
+                  - id
+                  - type
+                  - name
+                  - commercialBrand
+                  - commercialCreator
+                  - toBeGiven
+                  - margin
+                  - paymentStatus
+                  - invoiceStatus
+                  - deliverables
+              - type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                  name:
+                    type: string
+                  commercialBrand:
+                    type: number
+                  commercialCreator:
+                    type: number
+                  toBeGiven:
+                    type: number
+                  margin:
+                    type: number
+                  paymentStatus:
+                    type: string
+                    enum:
+                      - PENDING
+                      - PAID
+                  invoiceStatus:
+                    type: string
+                    enum:
+                      - PENDING
+                      - ISSUED
+                  influencer:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        deliverables:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              title:
+                                type: string
+                              platform:
+                                type: string
+                                enum:
+                                  - INSTAGRAM
+                                  - YOUTUBE
+                                  - TWITTER
+                              campaignStatus:
+                                type: string
+                                enum:
+                                  - ACTIVE
+                                  - COMPLETED
+                              deliverableLink:
+                                type: string
+                              er:
+                                type: number
+                                nullable: true
+                              cpv:
+                                type: number
+                                nullable: true
+                            required:
+                              - id
+                              - title
+                              - platform
+                              - campaignStatus
+                              - deliverableLink
+                      required:
+                        - name
+                        - deliverables
+                required:
+                  - id
+                  - type
+                  - name
+                  - commercialBrand
+                  - commercialCreator
+                  - toBeGiven
+                  - margin
+                  - paymentStatus
+                  - invoiceStatus
+                  - influencer
+      required:
+        - id
+        - name
+        - code
+        - brandName
+        - brand
+        - startDate
+        - endDate
+        - commercial
+        - incentiveWinner
+        - status
+        - participants
+
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: 'string'
+          format: 'uuid'
+          example: 'dad749c8-fb7d-44af-bdc2-7cf5fdacff2c'
+        name:
+          type: 'string'
+          example: 'Medical Campaign'
+        code:
+          type: 'string'
+          example: 'XBR2340'
+        brandName:
+          type: 'string'
+          example: 'chirag gupta'
+        brand:
+          type: 'string'
+          format: 'uuid'
+          example: 'dad749c8-fb7d-44af-bdc2-7cf5fdacff2c'
+        startDate:
+          type: 'string'
+          format: 'date'
+          example: '2024-09-07'
+        endDate:
+          type: 'string'
+          format: 'date'
+          example: '2024-09-07'
+        commercial:
+          type: 'integer'
+          format: 'int64'
+          example: 200000
+        details:
+          type: 'string'
+          nullable: true
+          example: 'lorem ipsum'
+        invoiceNo:
+          type: 'string'
+          nullable: true
+          example: 'DWT-567-85'
+        status:
+          type: 'string'
+          example: 'Pending'
+        cpv:
+          type: 'integer'
+          nullable: true
+          example: 0.45
+        platform:
+          type: 'string'
+          example: 'Instagram'
+        createdAt:
+          type: 'string'
+          format: 'date-time'
+          example: '2024-09-07T08:58:33.005Z'
+        updatedAt:
+          type: 'string'
+          format: 'date-time'
+          example: '2024-09-07T08:58:33.005Z'
+        participants:
+          type: 'array'
+          items:
+            $ref: '#/definitions/Participant'
+
+    Participant:
+      type: 'object'
+      properties:
+        profileId:
+          type: 'string'
+          format: 'uuid'
+          example: '1ff5afb3-c414-40fd-98bb-dd592644bbfb'
+        email:
+          type: 'string'
+          example: 'test@ageny.com'
+        id:
+          type: 'string'
+          format: 'uuid'
+          example: '1ff5afb3-c414-40fd-98bb-dd592644bbfb'
+        roleId:
+          type: 'integer'
+          format: 'int32'
+          example: 5
+        profilePic:
+          type: 'string'
+          nullable: true
+          example: null

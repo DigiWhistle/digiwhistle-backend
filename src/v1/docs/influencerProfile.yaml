@@ -1,0 +1,332 @@
+tags:
+  name: InfluencerProfile
+  description: Endpoints for influencer profiles
+
+paths:
+  /v1/influencer/profile:
+    post:
+      summary: Add a new Influencer profile
+      tags:
+        - InfluencerProfile
+      requestBody:
+        description: Influencer profile data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InfluencerProfileInput'
+      responses:
+        '201':
+          description: Influencer profile created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/InfluencerProfileInput'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+    get:
+      summary: Get influencer profile by user ID
+      tags:
+        - InfluencerProfile
+
+      responses:
+        '200':
+          description: Influencer profile fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/InfluencerProfile'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: Influencer profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+  /v1/influencer/profile/{id}:
+    get:
+      summary: Get influencer profile by id
+      tags:
+        - InfluencerProfile
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the influencer profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Influencer profile fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/InfluencerProfile'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: Influencer profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+    patch:
+      summary: update influencer profile by Id
+      tags:
+        - InfluencerProfile
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the influencer profile to update
+      requestBody:
+        description: Influencer profile data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInfluencerProfileInput'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Influencer profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/InfluencerProfile'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '404':
+          description: Influencer profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageModel'
+
+components:
+  schemas:
+    InfluencerProfileInput:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobileNo:
+          type: string
+        twitterURL:
+          type: string
+        linkedInURL:
+          type: string
+        instagramURL:
+          type: string
+        youtubeURL:
+          type: string
+        user:
+          type: string
+
+    InfluencerProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobileNo:
+          type: string
+        twitterURL:
+          type: string
+        linkedInURL:
+          type: string
+        instagramURL:
+          type: string
+        youtubeURL:
+          type: string
+        pay:
+          type: number
+        hideFrom:
+          type: string
+          enum:
+            - Brand
+            - Agency
+        exclusive:
+          type: boolean
+        aadharNo:
+          type: string
+        panNo:
+          type: string
+        gstNo:
+          type: string
+        msmeNo:
+          type: string
+        bankName:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankIfscCode:
+          type: string
+        bankAccountHolderName:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        pincode:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+
+    UpdateInfluencerProfileInput:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobileNo:
+          type: string
+        twitterURL:
+          type: string
+        linkedInURL:
+          type: string
+        instagramURL:
+          type: string
+        youtubeURL:
+          type: string
+        pay:
+          type: number
+        hideFrom:
+          type: string
+          enum:
+            - Brand
+            - Agency
+        exclusive:
+          type: boolean
+        aadharNo:
+          type: string
+        panNo:
+          type: string
+        gstNo:
+          type: string
+        msmeNo:
+          type: string
+        bankName:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankIfscCode:
+          type: string
+        bankAccountHolderName:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        pincode:
+          type: string
